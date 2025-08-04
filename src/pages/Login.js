@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { login } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
-import { Container, TextField, Button, Typography, Paper } from '@mui/material';
+import {
+  Container, TextField, Button, Typography, Paper, InputAdornment
+} from '@mui/material';
+import { AccountCircle, Lock } from '@mui/icons-material';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -19,13 +22,48 @@ export default function Login() {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ p: 4, mt: 10 }}>
-        <Typography variant="h5" gutterBottom>Iniciar Sesión</Typography>
+    <Container maxWidth="xs" sx={{ mt: 12 }}>
+      <Paper elevation={6} sx={{ p: 4, borderRadius: 3 }}>
+        <Typography variant="h5" gutterBottom align="center">🔐 Iniciar Sesión</Typography>
         <form onSubmit={handleSubmit}>
-          <TextField label="Usuario" fullWidth margin="normal" value={username} onChange={(e) => setUsername(e.target.value)} />
-          <TextField label="Contraseña" type="password" fullWidth margin="normal" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>Entrar</Button>
+          <TextField
+            label="Usuario"
+            fullWidth
+            margin="normal"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              )
+            }}
+          />
+          <TextField
+            label="Contraseña"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Lock />
+                </InputAdornment>
+              )
+            }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            Entrar
+          </Button>
         </form>
       </Paper>
     </Container>
