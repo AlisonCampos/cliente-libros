@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://localhost:7069/api',
+  baseURL: 'https://tienda-microservicio-libro-api.onrender.com/api',
 });
 
 API.interceptors.request.use((config) => {
@@ -9,7 +9,22 @@ API.interceptors.request.use((config) => {
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
-
+API.interceptors.response.use(
+  response => response,
+  async error => {
+    if (error.response && error.response.status === 401) {
+      alert('Tu sesión ha expirado. Se intentará renovar el token...');
+      try {
+        await import('./auth').then(({ refreshToken }) => refreshToken());
+        return API.request(error.config);
+      } catch {
+        alert('No se pudo renovar el token. Por favor, inicia sesión nuevamente.');
+        window.location.href = '/';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 export const obtenerAutores = () => API.get('/autor');
 export const obtenerAutorPorId = (id) => API.get(`/autor/${id}`);
 export const obtenerAutorPorNombre = (nombre) => API.get(`/autor/nombre?nombre=${nombre}`);
